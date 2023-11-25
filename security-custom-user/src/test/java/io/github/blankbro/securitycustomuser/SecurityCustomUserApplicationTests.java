@@ -1,10 +1,10 @@
-package io.github.blankbro.securityhello;
+package io.github.blankbro.securitycustomuser;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SecurityHelloApplicationTests {
+class SecurityCustomUserApplicationTests {
 
     @Test
     void contextLoads() {
