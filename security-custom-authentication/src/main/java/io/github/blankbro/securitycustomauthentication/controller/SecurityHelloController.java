@@ -1,4 +1,4 @@
-package io.github.blankbro.securitycustomuser.controller;
+package io.github.blankbro.securitycustomauthentication.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

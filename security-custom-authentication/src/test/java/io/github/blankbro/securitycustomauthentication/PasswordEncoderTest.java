@@ -1,4 +1,4 @@
-package io.github.blankbro.securitycustomuser;
+package io.github.blankbro.securitycustomauthentication;
 
 import org.junit.Ignore;
 import org.junit.Test;

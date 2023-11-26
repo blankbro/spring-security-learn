@@ -1,4 +1,4 @@
-package io.github.blankbro.securitycustomuser.config;
+package io.github.blankbro.securitycustomauthentication.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

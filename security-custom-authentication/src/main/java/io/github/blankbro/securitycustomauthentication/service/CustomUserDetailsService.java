@@ -1,8 +1,8 @@
-package io.github.blankbro.securitycustomuser.service;
+package io.github.blankbro.securitycustomauthentication.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import io.github.blankbro.securitycustomuser.entity.UserEntity;
-import io.github.blankbro.securitycustomuser.mapper.UserMapper;
+import io.github.blankbro.securitycustomauthentication.entity.UserEntity;
+import io.github.blankbro.securitycustomauthentication.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;

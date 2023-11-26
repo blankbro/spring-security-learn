@@ -1,4 +1,4 @@
-package io.github.blankbro.securitycustomuser.entity;
+package io.github.blankbro.securitycustomauthentication.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

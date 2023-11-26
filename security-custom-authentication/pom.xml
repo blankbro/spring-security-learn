@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>io.github.blankbro</groupId>
-    <artifactId>security-custom-user</artifactId>
+    <artifactId>security-custom-authentication</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>security-custom-user</name>
-    <description>security-custom-user</description>
+    <name>security-custom-authentication</name>
+    <description>security-custom-authentication</description>
 
     <properties>
         <java.version>1.8</java.version>

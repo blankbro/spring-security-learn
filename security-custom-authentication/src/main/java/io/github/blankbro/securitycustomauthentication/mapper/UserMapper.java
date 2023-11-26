@@ -1,7 +1,7 @@
-package io.github.blankbro.securitycustomuser.mapper;
+package io.github.blankbro.securitycustomauthentication.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.github.blankbro.securitycustomuser.entity.UserEntity;
+import io.github.blankbro.securitycustomauthentication.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
