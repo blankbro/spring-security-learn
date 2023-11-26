@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll() // 为 loginPage, loginProcessingUrl, failureUrl 放开访问权限
                 // 自定义请求的访问控制规则
                 .and().authorizeRequests()
-                .antMatchers("/", "/hello", "/login").permitAll() // 匹配路径，并开放访问
+                .antMatchers("/", "/hello").permitAll() // 匹配路径，并开放访问
                 .anyRequest().authenticated() // 匹配其它任意路径，并需要认证才能通过
                 // 跨域
                 .and().csrf().disable() // 关闭跨域防护，有啥作用？注释之后登录成功没有跳转到/index，而是回到了/login.html
