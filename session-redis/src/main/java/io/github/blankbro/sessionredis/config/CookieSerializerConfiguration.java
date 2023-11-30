@@ -6,7 +6,8 @@ import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
 /**
- * Cookie 配置类，也可通过 server.servlet.session.cookie 配置 Cookie 相关配置
+ * Cookie 配置类
+ * 也可通过配置文件配置 Cookie，配置项固定前缀：server.servlet.session.cookie
  */
 // @Configuration
 public class CookieSerializerConfiguration {
