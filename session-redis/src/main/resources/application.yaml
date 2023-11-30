@@ -1,0 +1,19 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        name: auth-test
+        http-only: true
+        domain: localhost
+      timeout: 7200
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      password:
+
+
+
