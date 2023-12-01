@@ -3,13 +3,9 @@ package io.github.blankbro.securitysessionredis.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.security.web.jackson2.WebServletJackson2Module;
+import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.session.data.redis.RedisIndexedSessionRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration;
@@ -17,7 +13,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.RedisHt
 /**
  * 设置及使用 Redis Session 非活动状态的过期参数 {@link EnableRedisHttpSession#maxInactiveIntervalInSeconds()}
  * <p>
- * Redis Key 在源码中的位置
+ * Redis Key 命名规则在源码中的位置
  * <p>
  * spring:session <br/>
  * {@link RedisIndexedSessionRepository#DEFAULT_NAMESPACE}
@@ -31,49 +27,28 @@ import org.springframework.session.data.redis.config.annotation.web.http.RedisHt
  * spring:session:sessions:expires:{session_id} <br/>
  * {@link RedisIndexedSessionRepository#getExpiredKey(String)}
  * <p>
- * 1. {@link RedisHttpSessionConfiguration#setImportMetadata(AnnotationMetadata)} 获取非活动状态的过期秒数，
- * 并设置 {@link RedisHttpSessionConfiguration#maxInactiveIntervalInSeconds}
- * <p>
- * 2. {@link RedisHttpSessionConfiguration#sessionRepository()} 将类属性 {@link RedisHttpSessionConfiguration#maxInactiveIntervalInSeconds}
- * 设置到 {@link RedisIndexedSessionRepository#setDefaultMaxInactiveInterval(int)} 中, 并注册为 {@link Bean}
- * <p>
- * 3. {@link RedisIndexedSessionRepository#createSession()} 将 {@link RedisIndexedSessionRepository#defaultMaxInactiveInterval}
- * 设置到 {@link RedisIndexedSessionRepository.RedisSession} 中（创建 Redis Session）
- * <p>
- * 4. 创建、读取、更新 Session: {@link org.springframework.session.web.http.SessionRepositoryFilter.SessionRepositoryRequestWrapper#getSession(boolean)}
  */
-@EnableRedisHttpSession
 @Configuration
+@EnableRedisHttpSession
 public class SessionRedisConfiguration {
 
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<?, ?> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory);
-
-        template.setKeySerializer(new StringRedisSerializer());
-
-        // @see org.springframework.security.web.jackson2.DefaultSavedRequestMixin
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new WebServletJackson2Module());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
-
-        template.afterPropertiesSet();
-
-        return template;
-    }
-
     /**
-     * Spring {@link javax.servlet.http.HttpSession} 默认 Redis 序列化程序
-     * 名称必须为：springSessionDefaultRedisSerializer
+     * RedisTemplate 的默认序列化器是 JdkSerializationRedisSerializer 但序列化之后的结果极不友好。
+     * 所以，此处使用大名鼎鼎的 GenericJackson2JsonRedisSerializer。
+     * <p>
+     * 但是 {@link org.springframework.security.web.savedrequest.DefaultSavedRequest} 没有无参构造器，
+     * 需要通过 {@link org.springframework.security.web.savedrequest.DefaultSavedRequest.Builder} 才能创建。
+     * 所以，又需要 objectMapper.registerModules(SecurityJackson2Modules.getModules(getClass().getClassLoader()));
      *
-     * @param redisTemplate Redis 模板
-     * @return Spring {@link javax.servlet.http.HttpSession} 默认 Redis 序列化程序
-     * @see RedisHttpSessionConfiguration#setDefaultRedisSerializer(RedisSerializer) 自定义 Spring {@link javax.servlet.http.HttpSession} 默认 Redis 序列化程序
+     * @see org.springframework.security.web.jackson2.DefaultSavedRequestMixin
+     * @see SecurityJackson2Modules
+     * @see RedisHttpSessionConfiguration#setDefaultRedisSerializer(RedisSerializer)
      */
     @Bean
-    public RedisSerializer<?> springSessionDefaultRedisSerializer(RedisTemplate<?, ?> redisTemplate) {
-        return redisTemplate.getValueSerializer();
+    public RedisSerializer<?> springSessionDefaultRedisSerializer() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModules(SecurityJackson2Modules.getModules(getClass().getClassLoader()));
+        return new GenericJackson2JsonRedisSerializer(objectMapper);
     }
 
 }
