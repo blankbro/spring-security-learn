@@ -5,7 +5,7 @@ import org.junit.Test;
 public class Base64UtilTest {
 
     @Test
-    public void test202311301952() {
-        System.out.println(Base64Util.base64Decode("YTdlZGRhYWQtNjVjYS00OGIyLWE0MzQtODUzNzRhNzI5MGI1"));
+    public void testBase64Decode() {
+        System.out.println(Base64Util.base64Decode("MWNmM2M5NTItZjMwNC00YmIzLThmYWEtY2Y4Y2JjZTViYTY2"));
     }
 }

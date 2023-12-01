@@ -5,6 +5,9 @@ import io.github.blankbro.securitysessionredis.util.Base64Util;
 import io.github.blankbro.securitysessionredis.vo.SessionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -23,6 +29,9 @@ public class SessionController {
 
     @Autowired
     private FindByIndexNameSessionRepository findByIndexNameSessionRepository;
+
+    @Autowired
+    private SessionRegistry sessionRegistry;
 
     @GetMapping("/session/test")
     public String test(HttpServletRequest request) {
@@ -37,6 +46,27 @@ public class SessionController {
         result.put("id(base64)", Base64Util.base64Encode(session.getId()));
 
         return JSON.toJSONString(result);
+    }
+
+    @GetMapping("/session/all")
+    public Object allSession() {
+        List<SessionVO> result = new ArrayList<>();
+
+        log.info("get all session");
+        List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+        for (Object principal : allPrincipals) {
+            List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
+            for (SessionInformation sessionInformation : sessionInformations) {
+                SessionVO sessionVO = new SessionVO();
+                sessionVO.setId(sessionInformation.getSessionId());
+                sessionVO.setIdOfBase64(Base64Util.base64Encode(sessionInformation.getSessionId()));
+                sessionVO.setUsername(((User) sessionInformation.getPrincipal()).getUsername());
+                sessionVO.setLastAccessedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(sessionInformation.getLastRequest()));
+                result.add(sessionVO);
+            }
+        }
+
+        return result;
     }
 
     @GetMapping("/session/get")
@@ -55,8 +85,8 @@ public class SessionController {
     @DeleteMapping("/session/del")
     public String delSession(@RequestParam String username) {
         Map<String, Session> sessionMap = findByIndexNameSessionRepository.findByPrincipalName(username);
-
         log.info("del {} session", username);
+
         sessionMap.forEach((sessionId, session) -> {
             findByIndexNameSessionRepository.deleteById(sessionId);
         });
