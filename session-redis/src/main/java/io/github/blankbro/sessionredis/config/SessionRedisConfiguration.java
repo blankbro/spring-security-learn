@@ -61,10 +61,10 @@ import java.time.format.DateTimeFormatter;
  */
 @EnableRedisHttpSession
 @Configuration
-public class RedisSessionConfiguration {
+public class SessionRedisConfiguration {
 
     @Bean
-    public RedisTemplate<?,?> redisTemplate(RedisConnectionFactory redisConnectionFactory){
+    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         // Helper类简化了 Redis 数据访问代码
         RedisTemplate<?, ?> template = new RedisTemplate<>();
 
