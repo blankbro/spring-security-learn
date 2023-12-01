@@ -7,8 +7,9 @@ server:
     session:
       cookie:
         name: auth-test
-        http-only: true
         domain: localhost
+        max-age: 7200
+        http-only: true
       timeout: 7200
 spring:
   data:
