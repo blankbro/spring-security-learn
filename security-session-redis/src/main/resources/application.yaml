@@ -1,0 +1,25 @@
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%t] %logger{39} %3L : %m%n"
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        name: auth-test
+        http-only: true
+        domain: localhost
+      timeout: 7200
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      password:
+  # database
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/security_learn?serverTimezone=GMT%2B8
+    username: root
+    password: root
