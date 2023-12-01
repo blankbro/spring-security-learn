@@ -6,6 +6,11 @@ server:
         name: auth-test
         http-only: true
         domain: localhost
+        # 控制浏览器中session id的Cookie的有效期。一般设置为-1,表示随浏览器窗口保持。
+        max-age: 7200
+      # 控制session在服务端的持续时间。也就是说session对象在服务端的有效期。一般设置为30分钟。
+      # 不建议 server.servlet.session.timeout 小于 server.servlet.session.cookie.max-age
+      # 如果启用 Session Redis 此处的配置将会无效
       timeout: 7200
 spring:
   data:
