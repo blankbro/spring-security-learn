@@ -27,6 +27,7 @@ import java.util.Map;
 @RestController
 public class SessionController {
 
+    // 使用了 @EnableRedisHttpSession 才能注入 FindByIndexNameSessionRepository
     @Autowired
     private FindByIndexNameSessionRepository findByIndexNameSessionRepository;
 
