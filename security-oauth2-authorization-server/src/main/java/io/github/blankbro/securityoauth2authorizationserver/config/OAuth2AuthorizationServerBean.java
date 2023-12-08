@@ -18,7 +18,6 @@ import javax.sql.DataSource;
 public class OAuth2AuthorizationServerBean {
 
 
-
     /**
      * 客户端详情服务
      *
@@ -45,7 +44,7 @@ public class OAuth2AuthorizationServerBean {
     }
 
     /**
-     * 令牌管理者
+     * 令牌管理服务
      *
      * @param clientDetailsService
      * @param tokenStore
@@ -63,12 +62,13 @@ public class OAuth2AuthorizationServerBean {
     }
 
     /**
-     * 设置授权码模式的授权码如何获取，暂时用内存方式
+     * 授权码服务
      *
      * @return
      */
     @Bean
     public AuthorizationCodeServices authorizationCodeServices() {
+        // 暂时用内存方式
         return new InMemoryAuthorizationCodeServices();
     }
 

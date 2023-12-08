@@ -2,33 +2,49 @@ package io.github.blankbro.securityoauth2authorizationserver.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 
 @EnableAuthorizationServer
 @Configuration
 public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
     private ClientDetailsService clientDetailsService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthorizationCodeServices authorizationCodeServices;
+
+    @Autowired
+    private AuthorizationServerTokenServices authorizationServerTokenServices;
 
     /**
-     * 用来配置令牌端点的安全约束
+     * 用来配置令牌端点（Token Endpoint）的安全约束
      *
      * @param security a fluent configurer for security features
      * @throws Exception
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        super.configure(security);
+        security
+                .tokenKeyAccess("permitAll()") // /oauth/token_key 公开访问
+                .checkTokenAccess("permitAll()") // /oauth/check_token 公开访问
+                .allowFormAuthenticationForClients(); // 表单认证，申请令牌
     }
 
     /**
@@ -42,11 +58,10 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(clientDetailsService);
-        clients.jdbc(null);
     }
 
     /**
-     * 用来配置令牌 (token) 的访问端点和令牌服务(tokenservices).
+     * 用来配置令牌 (token) 的访问端点和令牌服务(token services).
      *
      * @param endpoints the endpoints configurer
      * @throws Exception
@@ -55,7 +70,11 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 // .pathMapping("/oauth/confirm_access", "/custom/confirm_access") // 自定义授权同意页面
-                .authenticationManager(authenticationManager)
+                .authenticationManager(authenticationManager) // 认证管理器
+                .userDetailsService(userDetailsService) // 密码模式用户信息查询
+                .authorizationCodeServices(authorizationCodeServices) // 授权码服务
+                .tokenServices(authorizationServerTokenServices) // 令牌管理服务
+                .allowedTokenEndpointRequestMethods(HttpMethod.POST)
         ;
     }
 
