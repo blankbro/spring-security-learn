@@ -1,35 +1,24 @@
 package io.github.blankbro.securityoauth2authorizationserver.config;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-
-import javax.sql.DataSource;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 
 @EnableAuthorizationServer
 @Configuration
-public class CustomAuthorizationServerConfigurer extends AuthorizationServerConfigurerAdapter {
+public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    private JdbcClientDetailsService jdbcClientDetailsService;
+    @Autowired
+    private ClientDetailsService clientDetailsService;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public JdbcClientDetailsService jdbcClientDetailsService(DataSource dataSource, PasswordEncoder passwordEncoder) {
-        jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
-        jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
-        return jdbcClientDetailsService;
-    }
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     /**
      * 用来配置令牌端点的安全约束
@@ -52,7 +41,7 @@ public class CustomAuthorizationServerConfigurer extends AuthorizationServerConf
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(jdbcClientDetailsService);
+        clients.withClientDetails(clientDetailsService);
         clients.jdbc(null);
     }
 
@@ -64,7 +53,10 @@ public class CustomAuthorizationServerConfigurer extends AuthorizationServerConf
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        super.configure(endpoints);
+        endpoints
+                // .pathMapping("/oauth/confirm_access", "/custom/confirm_access") // 自定义授权同意页面
+                .authenticationManager(authenticationManager)
+        ;
     }
 
 
