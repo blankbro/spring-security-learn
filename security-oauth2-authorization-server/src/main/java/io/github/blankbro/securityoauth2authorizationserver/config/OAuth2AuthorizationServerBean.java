@@ -25,8 +25,13 @@ public class OAuth2AuthorizationServerBean {
      * @param passwordEncoder
      * @return
      */
-    @Bean
+    @Bean("myClientDetailsService")
     public ClientDetailsService clientDetailsService(DataSource dataSource, PasswordEncoder passwordEncoder) {
+        /**
+         * https://github.com/spring-projects/spring-security-oauth/blob/master/spring-security-oauth2/src/test/resources/schema.sql
+         * https://github.com/spring-attic/spring-security-oauth/blob/main/spring-security-oauth2/src/test/resources/schema.sql
+         * # 注意: 并用 BLOB 替换语句中的 LONGVARBINARY 类型
+         */
         JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
         jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
         return jdbcClientDetailsService;

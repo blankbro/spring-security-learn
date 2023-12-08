@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -23,10 +25,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private SessionRegistry sessionRegistry;
 
-    // 从父类加载认证管理器
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
+
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
+        // 从父类加载认证管理器
         return super.authenticationManagerBean();
     }
 
@@ -43,6 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/login.html")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/login_success.html")
+                .failureHandler(authenticationFailureHandler)
                 .permitAll();
         http.logout()
                 .logoutUrl("/logout")
@@ -52,7 +61,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/hello").permitAll()
                 .antMatchers("/getsession").hasAuthority("admin")
                 .anyRequest().authenticated();
-        http.exceptionHandling().accessDeniedPage("/unauth.html");
+        http.exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedPage("/unauth.html");
         http.csrf().disable();
 
         http.sessionManagement()

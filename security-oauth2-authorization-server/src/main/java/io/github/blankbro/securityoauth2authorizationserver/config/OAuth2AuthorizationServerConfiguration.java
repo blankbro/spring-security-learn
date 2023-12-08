@@ -14,6 +14,8 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 
+import javax.annotation.Resource;
+
 @EnableAuthorizationServer
 @Configuration
 public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
@@ -24,7 +26,7 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
+    @Resource(name = "myClientDetailsService")
     private ClientDetailsService clientDetailsService;
 
     @Autowired
