@@ -4,18 +4,34 @@
 -- used in tests that use HSQL
 create table oauth_client_details
 (
+    -- 客户端唯一标识
     client_id               VARCHAR(256) PRIMARY KEY,
+    -- 客户端拥有的资源
     resource_ids            VARCHAR(256),
+    -- 客户端安全码
     client_secret           VARCHAR(256),
+    -- 用来限制客户端访问范围，如果为空的话，name 客户端拥有全部访问范围
     scope                   VARCHAR(256),
+    -- 客户端可以使用的授权类型。目前已知的有：authorization_code,implicit,password,client_credentials,refresh_token。用逗号隔开
     authorized_grant_types  VARCHAR(256),
+    -- 回调地址。授权服务会往该回调地址推送此客户端相关的信息。
     web_server_redirect_uri VARCHAR(256),
+    -- 客户端可以使用的权限（基于Spring Security authorities）
     authorities             VARCHAR(256),
+    -- access_token 有效期
     access_token_validity   INTEGER,
+    -- refresh_token 有效期
     refresh_token_validity  INTEGER,
     additional_information  VARCHAR(4096),
+    -- 自动批准。true：表示用户默认同意；false：需要用户自己点击授权。
     autoapprove             VARCHAR(256)
 );
+
+-- 测试数据
+INSERT INTO `oauth_client_details` (`client_id`, `resource_ids`, `client_secret`, `scope`, `authorized_grant_types`, `web_server_redirect_uri`, `authorities`, `access_token_validity`, `refresh_token_validity`, `additional_information`, `autoapprove`)
+VALUES
+    ('client_01', 'order', '$2a$10$wqWbuBr.pLHQbxWk32rQ3eOSULEHm9VIX/hWyTkO0Z47MHUByvDK2', '-', 'authorization_code,implicit,password,client_credentials', 'https://www.baidu.com', NULL, NULL, NULL, NULL, 'false');
+
 
 create table oauth_client_token
 (

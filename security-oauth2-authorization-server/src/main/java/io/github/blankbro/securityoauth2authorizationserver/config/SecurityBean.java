@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.sql.DataSource;
@@ -46,7 +47,7 @@ public class SecurityBean {
     }
 
     /**
-     * 认证失败的处理器
+     * 账号密码登录时，认证失败的处理器
      *
      * @return
      */
@@ -64,6 +65,7 @@ public class SecurityBean {
 
     /**
      * 应该也是认证失败的处理器，但是啥时候回走到这里呢？？？
+     * 发起授权时，如果没有登录会走到该处理器。一般情况下是需要跳转到登录页面的，此处不能直接返回 JSON 😂
      *
      * @return
      */
@@ -74,6 +76,18 @@ public class SecurityBean {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding("UTF-8");
             response.getWriter().print(JSON.toJSONString(CommonResponseBuilder.buildErrorResponse(authException.getMessage())));
+            response.getWriter().flush();
+            response.getWriter().close();
+        };
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            log.error("accessDeniedHandler: {}", accessDeniedException.getMessage(), accessDeniedException);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().print(JSON.toJSONString(CommonResponseBuilder.buildErrorResponse(accessDeniedException.getMessage())));
             response.getWriter().flush();
             response.getWriter().close();
         };

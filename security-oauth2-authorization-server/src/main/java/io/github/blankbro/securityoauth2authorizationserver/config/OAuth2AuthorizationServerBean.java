@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 
@@ -43,9 +44,10 @@ public class OAuth2AuthorizationServerBean {
      * @return
      */
     @Bean
-    public TokenStore tokenStore() {
+    public TokenStore tokenStore(DataSource dataSource) {
         // 内存存储令牌
         return new InMemoryTokenStore();
+        // return new JdbcTokenStore(dataSource);
     }
 
     /**
