@@ -30,7 +30,7 @@ create table oauth_client_details
 -- 测试数据
 INSERT INTO `oauth_client_details` (`client_id`, `resource_ids`, `client_secret`, `scope`, `authorized_grant_types`, `web_server_redirect_uri`, `authorities`, `access_token_validity`, `refresh_token_validity`, `additional_information`, `autoapprove`)
 VALUES
-    ('client_01', 'order', '$2a$10$wqWbuBr.pLHQbxWk32rQ3eOSULEHm9VIX/hWyTkO0Z47MHUByvDK2', '-', 'authorization_code,implicit,password,client_credentials', 'https://www.baidu.com', NULL, NULL, NULL, NULL, 'false');
+    ('client_01', 'resource-id-01', '$2a$10$wqWbuBr.pLHQbxWk32rQ3eOSULEHm9VIX/hWyTkO0Z47MHUByvDK2', 'resource-scope-01', 'authorization_code,implicit,password,client_credentials,refresh_token', 'https://www.baidu.com', NULL, NULL, NULL, NULL, 'false');
 
 
 create table oauth_client_token
