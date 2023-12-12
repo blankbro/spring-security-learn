@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -34,6 +35,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
 
     @Bean
     @Override
@@ -66,6 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/getsession").hasAuthority("admin")
                 .anyRequest().authenticated();
         http.exceptionHandling()
+                // 发起授权时，如果没有登录会走到该处理器。一般情况下是需要跳转到登录页面的，此处不能直接返回 JSON 😂
                 // .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
                 .accessDeniedPage("/unauth.html");
@@ -76,5 +81,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .maximumSessions(2)
                 // 用于将创建和删除的会话注册到SessionRegistry中。SessionRegistry可以用于跟踪会话,例如查找处于活动状态的所有会话或特定principal的会话数。
                 .sessionRegistry(sessionRegistry);
+
+        // 资源服务器配置
+        http.oauth2ResourceServer()
+                // 此处为了方便，就共用了
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler)
+                .jwt();
     }
 }

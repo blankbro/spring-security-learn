@@ -48,7 +48,11 @@ public class OAuth2AuthorizationServerBean {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setSigningKey("SigningKey");
+        /**
+         * SigningKey 的长度必须大于 32, 否则在 decode 时回报这个错误
+         * Caused by: com.nimbusds.jose.KeyLengthException: The secret length must be at least 256 bits
+         */
+        jwtAccessTokenConverter.setSigningKey("SigningKey0123456789987654321012");
         return jwtAccessTokenConverter;
     }
 
