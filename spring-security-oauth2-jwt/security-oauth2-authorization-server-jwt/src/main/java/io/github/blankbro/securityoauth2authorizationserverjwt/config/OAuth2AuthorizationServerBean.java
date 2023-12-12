@@ -76,6 +76,8 @@ public class OAuth2AuthorizationServerBean {
             JwtAccessTokenConverter jwtAccessTokenConverter,
             CustomTokenEnhancer customTokenEnhancer) {
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+
+        // 如果想要在 jwt 中新增一些数据，jwtAccessTokenConverter 必须放在最后
         tokenEnhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer, jwtAccessTokenConverter));
 
         DefaultTokenServices tokenServices = new DefaultTokenServices();
