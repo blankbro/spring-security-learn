@@ -1,0 +1,11 @@
+server:
+  port: 8080
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%t] %logger{39} %3L : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  level:
+    org: info
+
+spring:
+  application:
+    name: authorization-server
