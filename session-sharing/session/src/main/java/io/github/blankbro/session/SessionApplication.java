@@ -1,4 +1,4 @@
-package io.github.blankbro.sessionredis;
+package io.github.blankbro.session;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -10,10 +10,10 @@ import java.util.Map;
 
 @Slf4j
 @SpringBootApplication
-public class SessionRedisApplication {
+public class SessionApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(SessionRedisApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(SessionApplication.class, args);
         log.info("=========>>> successful <<<=========");
         log.info("=========>>> successful <<<=========");
         Map<String, Filter> filterMap = applicationContext.getBeansOfType(Filter.class);
