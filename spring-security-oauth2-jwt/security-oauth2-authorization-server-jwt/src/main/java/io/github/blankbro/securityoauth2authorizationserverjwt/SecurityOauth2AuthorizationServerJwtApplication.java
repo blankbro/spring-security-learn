@@ -7,7 +7,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.servlet.Filter;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @SpringBootApplication
@@ -18,7 +20,8 @@ public class SecurityOauth2AuthorizationServerJwtApplication {
         log.info("=========>>> successful <<<=========");
         log.info("=========>>> successful <<<=========");
         // Spring Security 本质就是一连串的过滤器，下面就是所有的过滤器链了
-        FilterChainProxy springSecurityFilterChain = applicationContext.getBean("springSecurityFilterChain", FilterChainProxy.class);
+        Map<String, Filter> filterMap = applicationContext.getBeansOfType(Filter.class);
+        FilterChainProxy springSecurityFilterChain = (FilterChainProxy) filterMap.get("springSecurityFilterChain");
         List<SecurityFilterChain> filterChains = springSecurityFilterChain.getFilterChains();
         log.info("=========>>> successful <<<=========");
     }
