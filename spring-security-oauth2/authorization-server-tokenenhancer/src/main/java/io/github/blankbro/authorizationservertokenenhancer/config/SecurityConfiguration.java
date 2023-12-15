@@ -62,10 +62,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         // 资源服务器配置
-        // http.oauth2ResourceServer()
-        //         // 此处为了方便，就共用了
-        //         .authenticationEntryPoint(authenticationEntryPoint)
-        //         .accessDeniedHandler(accessDeniedHandler)
-        //         .jwt();
+        http.oauth2ResourceServer()
+                // 此处为了方便，就共用了
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler)
+                .jwt();
     }
 }
