@@ -16,9 +16,10 @@
     </properties>
 
     <modules>
-        <module>security-oauth2-authorization-server</module>
-        <module>security-oauth2-resource-server</module>
-        <module>security-oauth2-authorization-server-jwt</module>
-        <module>security-oauth2-resource-server-jwt</module>
+        <module>authorization-server</module>
+        <module>resource-server</module>
+        <module>authorization-server-jwt</module>
+        <module>resource-server-jwt</module>
+        <module>authorization-server-tokenenhancer</module>
     </modules>
 </project>
