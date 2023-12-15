@@ -12,7 +12,6 @@
     <modules>
         <module>spring-security-basic</module>
         <module>spring-security-oauth2</module>
-        <module>spring-security-oauth2-jwt</module>
         <module>session-sharing</module>
     </modules>
 

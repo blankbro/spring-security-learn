@@ -20,6 +20,7 @@
         <module>security-authentication-loginpage</module>
         <module>security-authorization</module>
         <module>security-rememberme</module>
+        <module>security-session</module>
     </modules>
 
 </project>

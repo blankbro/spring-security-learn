@@ -18,5 +18,6 @@
     <modules>
         <module>session-redis</module>
         <module>security-session-redis</module>
+        <module>session</module>
     </modules>
 </project>
