@@ -15,4 +15,9 @@ public class TestController {
     public String hello() {
         return "Hello";
     }
+
+    @GetMapping("/update")
+    public String update() {
+        return "Update";
+    }
 }
