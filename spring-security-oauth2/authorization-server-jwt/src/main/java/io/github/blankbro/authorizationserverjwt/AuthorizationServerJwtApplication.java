@@ -13,10 +13,10 @@ import java.util.Map;
 
 @Slf4j
 @SpringBootApplication
-public class SecurityOauth2AuthorizationServerJwtApplication {
+public class AuthorizationServerJwtApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(SecurityOauth2AuthorizationServerJwtApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(AuthorizationServerJwtApplication.class, args);
         log.info("=========>>> successful <<<=========");
         log.info("=========>>> successful <<<=========");
         // Spring Security 本质就是一连串的过滤器，下面就是所有的过滤器链了

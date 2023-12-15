@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
 @SpringBootApplication
-public class SecurityOauth2AuthorizationServerApplication {
+public class AuthorizationServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SecurityOauth2AuthorizationServerApplication.class, args);
+		SpringApplication.run(AuthorizationServerApplication.class, args);
 		log.info("=========>>> successful <<<=========");
 		log.info("=========>>> successful <<<=========");
 		log.info("=========>>> successful <<<=========");

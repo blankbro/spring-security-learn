@@ -7,10 +7,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableConfigurationProperties({AuthorizationServerProperties.class})
 @SpringBootApplication
-public class SecurityOauth2ResourceServerApplication {
+public class ResourceServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SecurityOauth2ResourceServerApplication.class, args);
+        SpringApplication.run(ResourceServerApplication.class, args);
     }
 
 }
