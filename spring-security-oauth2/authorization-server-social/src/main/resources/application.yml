@@ -9,3 +9,18 @@ logging:
 spring:
   application:
     name: authorization-server
+
+social:
+  registration:
+    we-chat-test:
+      provider: we-chat
+      corp-id: lalala
+      app-id: lalala
+      app-secret: 0lalala
+      redirect-uri: http://localhost:8080/social-callback/we-chat/we-chat-test
+  provider:
+    we-chat:
+      scope: snsapi_base
+      authorization-uri: https://open.weixin.qq.com/connect/oauth2/authorize
+      token-uri: https://qyapi.weixin.qq.com/cgi-bin/gettoken
+      user-info-uri: https://qyapi.weixin.qq.com/cgi-bin/user/get
