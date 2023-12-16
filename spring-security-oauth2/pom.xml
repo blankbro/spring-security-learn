@@ -21,5 +21,6 @@
         <module>authorization-server-jwt</module>
         <module>resource-server-jwt</module>
         <module>authorization-server-tokenenhancer</module>
+        <module>authorization-server-social</module>
     </modules>
 </project>
