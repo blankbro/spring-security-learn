@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * 只有请求 /oauth/token 接口的时候（也就是申请 token 的时候）才会走到这里，其它情况不会走到这里
+ */
 @Slf4j
 @Component
 public class CustomTokenEnhancer implements TokenEnhancer {
