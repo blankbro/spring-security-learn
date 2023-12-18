@@ -38,13 +38,14 @@ public class OAuth2AuthenticationService<S> extends AbstractSocialAuthentication
 		}
 
 		try {
-			AccessGrant accessGrant = connectionFactory.getOAuthOperations().exchangeForAccess(registrationId, code);
-			Connection<S> connection = connectionFactory.createConnection(accessGrant);
-			return new SocialAuthenticationToken(connection);
+			// AccessGrant accessGrant = connectionFactory.getOAuthOperations().exchangeForAccess(registrationId, code);
+			// Connection<S> connection = connectionFactory.createConnection(accessGrant);
+			// return new SocialAuthenticationToken(connection);
 		} catch (RestClientException e) {
 			log.error("failed to exchange for access", e);
 			throw new SocialAuthenticationRedirectException("/login?error", "failed to exchange for access!");
 		}
+		return null;
 	}
 
 }
