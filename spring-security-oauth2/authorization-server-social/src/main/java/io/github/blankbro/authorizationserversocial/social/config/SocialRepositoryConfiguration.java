@@ -1,4 +1,4 @@
-package io.github.blankbro.authorizationserversocial.social.framework.config;
+package io.github.blankbro.authorizationserversocial.social.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

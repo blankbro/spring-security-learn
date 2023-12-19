@@ -1,4 +1,4 @@
-package io.github.blankbro.authorizationserversocial.social.framework.config;
+package io.github.blankbro.authorizationserversocial.social.config;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,17 +1,19 @@
-package io.github.blankbro.authorizationserversocial.social.wechat.oauth2;
+package io.github.blankbro.authorizationserversocial.social.wechat.connect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.blankbro.authorizationserversocial.social.framework.core.oauth2.AccessGrant;
-import io.github.blankbro.authorizationserversocial.social.framework.core.oauth2.OAuth2Parameters;
-import io.github.blankbro.authorizationserversocial.social.framework.core.oauth2.OAuth2Template;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.social.oauth2.AccessGrant;
+import org.springframework.social.oauth2.OAuth2Parameters;
+import org.springframework.social.oauth2.OAuth2Template;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Map;
 
@@ -32,8 +34,17 @@ public class WeChatOAuth2Template extends OAuth2Template {
 
     private String accessTokenUrl;
 
+    /**
+     * 微信获取授权码的url
+     */
     private static final String AUTHORIZE_URL = "https://open.weixin.qq.com/connect/qrconnect";
+    /**
+     * 微信获取accessToken的url
+     */
     private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
+    /**
+     * 微信刷新accessToken的url
+     */
     private static final String REFRESH_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/refresh_token";
 
     public WeChatOAuth2Template(String clientId, String clientSecret) {
@@ -128,9 +139,15 @@ public class WeChatOAuth2Template extends OAuth2Template {
      * 构建获取授权码的请求。也就是引导用户跳转到微信的地址。
      */
     public String buildAuthenticateUrl(OAuth2Parameters parameters) {
-        String url = super.buildAuthenticateUrl(parameters);
-        url = url + "&appid=" + clientId + "&scope=snsapi_login";
-        return url;
+        StringBuilder authenticateUrl = new StringBuilder(AUTHORIZE_URL);
+
+        authenticateUrl.append("?appid=" + clientId);
+        authenticateUrl.append("&redirect_uri=" + formEncode(parameters.getRedirectUri()));
+        authenticateUrl.append("&response_type=code");
+        authenticateUrl.append("&scope=snsapi_login");
+        // authenticateUrl.append("&scope=snsapi_base");
+
+        return authenticateUrl.toString();
     }
 
     public String buildAuthorizeUrl(OAuth2Parameters parameters) {
@@ -144,6 +161,15 @@ public class WeChatOAuth2Template extends OAuth2Template {
         RestTemplate restTemplate = super.createRestTemplate();
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
         return restTemplate;
+    }
+
+    private String formEncode(String data) {
+        try {
+            return URLEncoder.encode(data, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            // should not happen, UTF-8 is always supported
+            throw new IllegalStateException(ex);
+        }
     }
 
 }

@@ -1,7 +1,7 @@
-package io.github.blankbro.authorizationserversocial.social.wechat.oauth2;
+package io.github.blankbro.authorizationserversocial.social.wechat.connect;
 
 
-import io.github.blankbro.authorizationserversocial.social.framework.core.oauth2.AccessGrant;
+import org.springframework.social.oauth2.AccessGrant;
 
 /**
  * 对微信access_token信息的封装
