@@ -42,8 +42,16 @@ public class WeChatOAuth2ConnectionFactory extends OAuth2ConnectionFactory<WeCha
      * @return
      */
     public Connection<WeChatApi> createConnection(AccessGrant accessGrant) {
-        return new OAuth2Connection<WeChatApi>(getProviderId(), extractProviderUserId(accessGrant), accessGrant.getAccessToken(),
-                accessGrant.getRefreshToken(), accessGrant.getExpireTime(), getOAuth2ServiceProvider(), getApiAdapter(extractProviderUserId(accessGrant)));
+        String providerUserId = extractProviderUserId(accessGrant);
+        return new OAuth2Connection<WeChatApi>(
+                getProviderId(),
+                providerUserId,
+                accessGrant.getAccessToken(),
+                accessGrant.getRefreshToken(),
+                accessGrant.getExpireTime(),
+                getOAuth2ServiceProvider(),
+                getApiAdapter(providerUserId)
+        );
     }
 
     /**
@@ -51,7 +59,11 @@ public class WeChatOAuth2ConnectionFactory extends OAuth2ConnectionFactory<WeCha
      * @return
      */
     public Connection<WeChatApi> createConnection(ConnectionData data) {
-        return new OAuth2Connection<WeChatApi>(data, getOAuth2ServiceProvider(), getApiAdapter(data.getProviderUserId()));
+        return new OAuth2Connection<WeChatApi>(
+                data,
+                getOAuth2ServiceProvider(),
+                getApiAdapter(data.getProviderUserId())
+        );
     }
 
     /**

@@ -1,4 +1,4 @@
-package io.github.blankbro.authorizationserversocial.social.wechat.dto;
+package io.github.blankbro.authorizationserversocial.social.wechat.api.dto;
 
 import lombok.Data;
 

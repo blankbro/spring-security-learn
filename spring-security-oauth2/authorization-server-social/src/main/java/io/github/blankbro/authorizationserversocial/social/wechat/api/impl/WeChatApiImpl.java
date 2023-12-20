@@ -2,7 +2,7 @@ package io.github.blankbro.authorizationserversocial.social.wechat.api.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.blankbro.authorizationserversocial.social.wechat.api.WeChatApi;
-import io.github.blankbro.authorizationserversocial.social.wechat.dto.WeChatUserInfo;
+import io.github.blankbro.authorizationserversocial.social.wechat.api.dto.WeChatUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -68,7 +68,7 @@ public class WeChatApiImpl extends AbstractOAuth2ApiBinding implements WeChatApi
         try {
             userInfo = objectMapper.readValue(response, WeChatUserInfo.class);
         } catch (Exception e) {
-
+            log.error(e.getMessage(), e);
         }
         return userInfo;
     }

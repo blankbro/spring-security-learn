@@ -1,6 +1,6 @@
 package io.github.blankbro.authorizationserversocial.social.wechat.api;
 
-import io.github.blankbro.authorizationserversocial.social.wechat.dto.WeChatUserInfo;
+import io.github.blankbro.authorizationserversocial.social.wechat.api.dto.WeChatUserInfo;
 
 /**
  * 微信API调用接口

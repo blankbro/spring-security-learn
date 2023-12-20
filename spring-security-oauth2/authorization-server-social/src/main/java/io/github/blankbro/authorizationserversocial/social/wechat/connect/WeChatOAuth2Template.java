@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -71,9 +71,9 @@ public class WeChatOAuth2Template extends OAuth2Template {
 
         StringBuilder accessTokenRequestUrl = new StringBuilder(accessTokenUrl);
 
-        accessTokenRequestUrl.append("?appid=" + clientId);
-        accessTokenRequestUrl.append("&secret=" + clientSecret);
-        accessTokenRequestUrl.append("&code=" + authorizationCode);
+        accessTokenRequestUrl.append("?appid=").append(clientId);
+        accessTokenRequestUrl.append("&secret=").append(clientSecret);
+        accessTokenRequestUrl.append("&code=").append(authorizationCode);
         accessTokenRequestUrl.append("&grant_type=authorization_code");
 
         return getAccessToken(accessTokenRequestUrl);
@@ -90,9 +90,9 @@ public class WeChatOAuth2Template extends OAuth2Template {
 
         StringBuilder refreshTokenUrl = new StringBuilder(REFRESH_TOKEN_URL);
 
-        refreshTokenUrl.append("?appid=" + clientId);
+        refreshTokenUrl.append("?appid=").append(clientId);
         refreshTokenUrl.append("&grant_type=refresh_token");
-        refreshTokenUrl.append("&refresh_token=" + refreshToken);
+        refreshTokenUrl.append("&refresh_token=").append(refreshToken);
 
         return getAccessToken(refreshTokenUrl);
     }
@@ -116,7 +116,7 @@ public class WeChatOAuth2Template extends OAuth2Template {
         try {
             result = new ObjectMapper().readValue(response, Map.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         // 返回错误码时直接返回空
@@ -127,12 +127,12 @@ public class WeChatOAuth2Template extends OAuth2Template {
         }
 
         WeChatAccessGrant accessToken = new WeChatAccessGrant(
+                MapUtils.getString(result, "openid"),
                 MapUtils.getString(result, "access_token"),
                 MapUtils.getString(result, "scope"),
                 MapUtils.getString(result, "refresh_token"),
-                MapUtils.getLong(result, "expires_in"));
-
-        accessToken.setOpenId(MapUtils.getString(result, "openid"));
+                MapUtils.getLong(result, "expires_in")
+        );
 
         return accessToken;
     }
@@ -144,15 +144,15 @@ public class WeChatOAuth2Template extends OAuth2Template {
     public String buildAuthorizeUrl(OAuth2Parameters parameters) {
         StringBuilder authenticateUrl = new StringBuilder(this.authorizeUrl);
         if (OFFIACCOUNT_AUTHORIZE_URL.equals(this.authorizeUrl)) {
-            authenticateUrl.append("?appid=" + clientId);
-            authenticateUrl.append("&redirect_uri=" + formEncode(parameters.getRedirectUri()));
+            authenticateUrl.append("?appid=").append(clientId);
+            authenticateUrl.append("&redirect_uri=").append(formEncode(parameters.getRedirectUri()));
             authenticateUrl.append("&response_type=code");
             authenticateUrl.append("&scope=snsapi_userinfo");
             authenticateUrl.append("&forcePopup=true");
             authenticateUrl.append("#wechat_redirect");
         } else if (OPLATFORM_AUTHORIZE_URL.equals(this.authorizeUrl)) {
-            authenticateUrl.append("?appid=" + clientId);
-            authenticateUrl.append("&redirect_uri=" + formEncode(parameters.getRedirectUri()));
+            authenticateUrl.append("?appid=").append(clientId);
+            authenticateUrl.append("&redirect_uri=").append(formEncode(parameters.getRedirectUri()));
             authenticateUrl.append("&response_type=code");
             authenticateUrl.append("&scope=snsapi_login");
             authenticateUrl.append("#wechat");
@@ -165,7 +165,7 @@ public class WeChatOAuth2Template extends OAuth2Template {
      */
     protected RestTemplate createRestTemplate() {
         RestTemplate restTemplate = super.createRestTemplate();
-        restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
     }
 

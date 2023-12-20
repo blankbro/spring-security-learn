@@ -1,6 +1,5 @@
-package io.github.blankbro.authorizationserversocial.social.wechat.oauth2;
+package io.github.blankbro.authorizationserversocial.social.wechat.connect;
 
-import io.github.blankbro.authorizationserversocial.social.wechat.connect.WeChatOAuth2Template;
 import org.junit.Test;
 import org.springframework.social.oauth2.OAuth2Parameters;
 

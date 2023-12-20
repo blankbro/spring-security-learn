@@ -1,7 +1,7 @@
 package io.github.blankbro.authorizationserversocial.social.wechat.connect;
 
 import io.github.blankbro.authorizationserversocial.social.wechat.api.WeChatApi;
-import io.github.blankbro.authorizationserversocial.social.wechat.dto.WeChatUserInfo;
+import io.github.blankbro.authorizationserversocial.social.wechat.api.dto.WeChatUserInfo;
 import org.springframework.social.connect.ApiAdapter;
 import org.springframework.social.connect.ConnectionValues;
 import org.springframework.social.connect.UserProfile;
