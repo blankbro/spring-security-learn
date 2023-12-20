@@ -20,24 +20,19 @@ import java.util.Map;
 /**
  * 完成微信的OAuth2认证流程的模板类。
  * 国内厂商实现的OAuth2方式不同, Spring默认提供的OAuth2Template无法完整适配，只能针对每个厂商调整。
- * <p>
- * WeChat 接口文档：https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html
- * 可参考的开源项目：https://github.com/LiHaodong888/pre
  */
 public class WeChatOAuth2Template extends OAuth2Template {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    private String clientId;
-
-    private String clientSecret;
-
-    private String accessTokenUrl;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
-     * 微信获取授权码的url
+     * 微信公众号 授权码页面的url
      */
-    private static final String AUTHORIZE_URL = "https://open.weixin.qq.com/connect/qrconnect";
+    public static final String OFFIACCOUNT_AUTHORIZE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize";
+    /**
+     * 微信开放平台 二维码的url
+     */
+    public static final String OPLATFORM_AUTHORIZE_URL = "https://open.weixin.qq.com/connect/qrconnect";
     /**
      * 微信获取accessToken的url
      */
@@ -47,12 +42,19 @@ public class WeChatOAuth2Template extends OAuth2Template {
      */
     private static final String REFRESH_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/refresh_token";
 
-    public WeChatOAuth2Template(String clientId, String clientSecret) {
-        super(clientId, clientSecret, AUTHORIZE_URL, ACCESS_TOKEN_URL);
+    private String clientId;
+    private String clientSecret;
+    private String authorizeUrl;
+    private String accessTokenUrl;
+
+
+    public WeChatOAuth2Template(String clientId, String clientSecret, String authorizeUrl) {
+        super(clientId, clientSecret, authorizeUrl, ACCESS_TOKEN_URL);
         setUseParametersForClientAuthentication(true);  // 请求中添加client_id和client_secret参数
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.accessTokenUrl = ACCESS_TOKEN_URL;
+        this.authorizeUrl = authorizeUrl;
     }
 
     /**
@@ -138,20 +140,24 @@ public class WeChatOAuth2Template extends OAuth2Template {
     /**
      * 构建获取授权码的请求。也就是引导用户跳转到微信的地址。
      */
-    public String buildAuthenticateUrl(OAuth2Parameters parameters) {
-        StringBuilder authenticateUrl = new StringBuilder(AUTHORIZE_URL);
-
-        authenticateUrl.append("?appid=" + clientId);
-        authenticateUrl.append("&redirect_uri=" + formEncode(parameters.getRedirectUri()));
-        authenticateUrl.append("&response_type=code");
-        authenticateUrl.append("&scope=snsapi_login");
-        // authenticateUrl.append("&scope=snsapi_base");
-
-        return authenticateUrl.toString();
-    }
-
+    @Override
     public String buildAuthorizeUrl(OAuth2Parameters parameters) {
-        return buildAuthenticateUrl(parameters);
+        StringBuilder authenticateUrl = new StringBuilder(this.authorizeUrl);
+        if (OFFIACCOUNT_AUTHORIZE_URL.equals(this.authorizeUrl)) {
+            authenticateUrl.append("?appid=" + clientId);
+            authenticateUrl.append("&redirect_uri=" + formEncode(parameters.getRedirectUri()));
+            authenticateUrl.append("&response_type=code");
+            authenticateUrl.append("&scope=snsapi_userinfo");
+            authenticateUrl.append("&forcePopup=true");
+            authenticateUrl.append("#wechat_redirect");
+        } else if (OPLATFORM_AUTHORIZE_URL.equals(this.authorizeUrl)) {
+            authenticateUrl.append("?appid=" + clientId);
+            authenticateUrl.append("&redirect_uri=" + formEncode(parameters.getRedirectUri()));
+            authenticateUrl.append("&response_type=code");
+            authenticateUrl.append("&scope=snsapi_login");
+            authenticateUrl.append("#wechat");
+        }
+        return authenticateUrl.toString();
     }
 
     /**

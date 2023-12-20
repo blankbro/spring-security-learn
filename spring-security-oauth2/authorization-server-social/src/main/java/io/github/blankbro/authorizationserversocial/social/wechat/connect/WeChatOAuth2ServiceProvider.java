@@ -14,7 +14,7 @@ public class WeChatOAuth2ServiceProvider extends AbstractOAuth2ServiceProvider<W
      * @param appSecret
      */
     public WeChatOAuth2ServiceProvider(String appId, String appSecret) {
-        super(new WeChatOAuth2Template(appId, appSecret));
+        super(new WeChatOAuth2Template(appId, appSecret, WeChatOAuth2Template.OFFIACCOUNT_AUTHORIZE_URL));
     }
 
     /**
