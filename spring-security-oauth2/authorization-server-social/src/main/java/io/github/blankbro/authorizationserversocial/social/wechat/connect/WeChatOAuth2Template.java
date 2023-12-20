@@ -36,7 +36,7 @@ public class WeChatOAuth2Template extends OAuth2Template {
     /**
      * 微信获取accessToken的url
      */
-    private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
+    private static final String ACCESS_TOKEN_URL = "https://api.weixin.oqq.com/sns/oauth2/access_token";
     /**
      * 微信刷新accessToken的url
      */
@@ -158,6 +158,11 @@ public class WeChatOAuth2Template extends OAuth2Template {
             authenticateUrl.append("#wechat");
         }
         return authenticateUrl.toString();
+    }
+
+    @Override
+    public String buildAuthenticateUrl(OAuth2Parameters parameters) {
+        return buildAuthorizeUrl(parameters);
     }
 
     /**
