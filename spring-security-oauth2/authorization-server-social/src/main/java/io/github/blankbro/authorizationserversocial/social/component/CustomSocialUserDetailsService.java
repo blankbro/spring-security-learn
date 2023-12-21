@@ -1,4 +1,4 @@
-package io.github.blankbro.authorizationserversocial.social.service;
+package io.github.blankbro.authorizationserversocial.social.component;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

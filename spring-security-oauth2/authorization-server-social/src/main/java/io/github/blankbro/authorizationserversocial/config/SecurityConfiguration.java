@@ -43,6 +43,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("user")
                 .password("123")
+                .authorities("admin")
+                // social 用户
+                .and()
+                .withUser("we-chat:xxx")
+                .password("")
                 .authorities("admin");
     }
 

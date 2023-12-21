@@ -14,7 +14,7 @@ public class WeChatOAuth2TemplateTest {
         );
 
         OAuth2Parameters oAuth2Parameters = new OAuth2Parameters();
-        oAuth2Parameters.setRedirectUri("http://10.10.39.255");
+        oAuth2Parameters.setRedirectUri("http://10.10.37.128:8080/auth/we-chat");
 
         String buildAuthorizeUrl = weChatOAuth2Template.buildAuthorizeUrl(oAuth2Parameters);
         System.out.println(buildAuthorizeUrl);
